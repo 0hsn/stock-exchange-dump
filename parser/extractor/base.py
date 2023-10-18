@@ -1,9 +1,9 @@
 """
 Extractor module
 """
+
 from __future__ import annotations
 from abc import ABC, abstractmethod
-import functools
 
 
 class Extractor(ABC):
@@ -14,4 +14,4 @@ class Extractor(ABC):
 
     @abstractmethod
     def extract(self):
-        """extract signature"""            
+        """extract signature"""
