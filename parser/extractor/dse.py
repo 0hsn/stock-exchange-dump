@@ -4,9 +4,58 @@ Extractor module
 
 from parser.extractor.base import Extractor
 
+from parsel import Selector
+
 
 class SharePriceExtractor(Extractor):
     """SharePriceExtractor"""
 
     def extract(self):
-        ...
+        """extract"""
+
+        html = self._parser_price_table_()
+        header = self._parser_table_header_(html)
+        body = self._parser_table_body_(html)
+
+    def _parser_price_table_(self) -> str:
+        """parser price table"""
+
+        html_sel = Selector(self._data)
+        table_sel = html_sel.css("div.table-responsive.inner-scroll")
+
+        return (
+            table_sel.get()
+            .replace("</tbody>", "")
+            .replace("</table>", "</tbody></table>")
+        )
+
+    def _parser_table_header_(self, html: str) -> list[str]:
+        """parser table header"""
+
+        content_sel = Selector(html)
+
+        return content_sel.css("thead > tr > th::text").getall()
+
+    def _parser_table_body_(self, html: str) -> list[list[str]]:
+        """parser table body"""
+
+        def prepare_cell_data(item: str):
+            if "displayCompany" in item:
+                idx1 = item.index("?name=") + len("?name=")
+                item = item[idx1:]
+
+                idx2 = item.index('"')
+                return item[:idx2]
+            else:
+                content_sel = Selector(item)
+                return content_sel.css("td::text").get()
+
+        content_sel = Selector(html)
+        body_sel = content_sel.css("tbody > tr")
+        all_data = []
+
+        for tablerow in body_sel:
+            table_cells = tablerow.css("tr > td").getall()
+            all_data.append(list(map(prepare_cell_data, table_cells)))
+
+        return all_data
