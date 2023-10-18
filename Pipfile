@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+parsel = "*"
 
 [dev-packages]
 flake8 = "*"
