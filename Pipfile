@@ -8,6 +8,7 @@ name = "pypi"
 [dev-packages]
 flake8 = "*"
 pylint = "*"
+notebook = "*"
 
 [requires]
 python_version = "3.10"
