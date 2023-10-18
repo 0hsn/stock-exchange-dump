@@ -2,9 +2,11 @@
 Extractor module
 """
 
-from parser.extractor import Extractor
+from parser.extractor.base import Extractor
 
-class SharePriceExtracrtor(Extractor):
-    """SharePriceExtracrtor"""
+
+class SharePriceExtractor(Extractor):
+    """SharePriceExtractor"""
 
     def extract(self):
+        ...
