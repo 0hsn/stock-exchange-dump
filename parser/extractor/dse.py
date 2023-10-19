@@ -1,21 +1,24 @@
 """
 Extractor module
 """
+from parsel import Selector
 
 from parser.extractor.base import Extractor
-
-from parsel import Selector
+from parser.writer import CsvContent
 
 
 class SharePriceExtractor(Extractor):
     """SharePriceExtractor"""
 
-    def extract(self):
+    def extract(self) -> tuple[list, list[list[str]]]:
         """extract"""
 
         html = self._parser_price_table_()
+
         header = self._parser_table_header_(html)
         body = self._parser_table_body_(html)
+
+        return CsvContent(header, body)
 
     def _parser_price_table_(self) -> str:
         """parser price table"""
