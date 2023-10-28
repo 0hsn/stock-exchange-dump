@@ -12,8 +12,10 @@ from __future__ import annotations
 import argparse
 import sys
 
+from icecream import ic
 
 from sed_parser.extractor.base import SiteList, PageTypeList, CommandArgs
+from sed_parser.extractor.services import ExtractionOp
 
 
 def setup_argument_parser() -> CommandArgs:
@@ -51,3 +53,4 @@ if __name__ == "__main__":
     # input()
 
     c_args = setup_argument_parser()
+    ExtractionOp.from_arg(c_args)
