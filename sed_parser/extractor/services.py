@@ -1,11 +1,9 @@
 """
 Extractor service
 """
-
-from icecream import ic
-
 from sed_parser.extractor.base import CommandArgs, SiteList, PageTypeList
 from sed_parser.extractor.dse import SharePriceExtractor
+from sed_parser.writer import select_stream_writer
 
 
 class ExtractionOp:
@@ -25,6 +23,11 @@ class ExtractionOp:
 
         if extractor:
             content = extractor.extract()
-            ic(content)
+
+            writer = select_stream_writer(args.format)
+            writer.format(content)
+            writer.dump()
+
+            return
 
         raise SystemExit("error: site or page-type mismatch.")
