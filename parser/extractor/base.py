@@ -13,6 +13,32 @@ site_list = ["dse"]
 page_type_list = ["sharePrice"]
 
 
+class Content:
+    """Content"""
+
+
+class CsvContent(Content):
+    """CsvContent"""
+
+    def __init__(self, header: list[str], body: list[list[str]]) -> None:
+        """Constructor"""
+
+        self._header = header
+        self._body = body
+
+    @property
+    def header(self):
+        """header"""
+
+        return self._header
+
+    @property
+    def body(self):
+        """body"""
+
+        return self._body
+
+
 class Extractor(ABC):
     """Base Extractor"""
 

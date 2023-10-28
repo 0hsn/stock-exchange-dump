@@ -3,8 +3,7 @@ Extractor module
 """
 from parsel import Selector
 
-from parser.extractor.base import Extractor
-from parser.writer import CsvContent
+from parser.extractor.base import CsvContent, Extractor
 
 
 class SharePriceExtractor(Extractor):
