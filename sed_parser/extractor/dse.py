@@ -3,7 +3,7 @@ Extractor module
 """
 from parsel import Selector
 
-from parser.extractor.base import CsvContent, Extractor
+from sed_parser.extractor.base import CsvContent, Extractor
 
 
 class SharePriceExtractor(Extractor):

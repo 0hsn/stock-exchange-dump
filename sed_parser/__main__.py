@@ -12,7 +12,7 @@ from __future__ import annotations
 import argparse
 import typing
 
-from parser.extractor.base import site_list, page_type_list
+from sed_parser.extractor.base import site_list, page_type_list
 
 
 class CommandArgs(typing.NamedTuple):

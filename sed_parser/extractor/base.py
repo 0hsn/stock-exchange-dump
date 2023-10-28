@@ -6,7 +6,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-from parser.writer import FileWriter
+from sed_parser.writer import FileWriter
 
 
 site_list = ["dse"]
