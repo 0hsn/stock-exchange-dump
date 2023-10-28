@@ -9,6 +9,10 @@ from datetime import datetime
 from parser.writer import FileWriter
 
 
+site_list = ["dse"]
+page_type_list = ["sharePrice"]
+
+
 class Extractor(ABC):
     """Base Extractor"""
 
