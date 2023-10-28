@@ -4,6 +4,7 @@ Extractor module
 
 from __future__ import annotations
 from abc import ABC, abstractmethod
+
 import dataclasses
 import enum
 
@@ -20,12 +21,19 @@ class PageTypeList(enum.Enum):
     SHARE_PRICE = "sharePrice"
 
 
+class FormatList(enum.Enum):
+    """PageTypeList"""
+
+    CSV = "csv"
+
+
 @dataclasses.dataclass
 class CommandArgs:
     """CommandArgs"""
 
     site: str
     page_type: str
+    format: str
     data: object = ""
 
 

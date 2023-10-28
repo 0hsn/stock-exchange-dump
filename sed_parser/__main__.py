@@ -7,14 +7,11 @@ usage:
 sample use-case: 
     curl [URL] -s | python -m parser --site dse --page-type sharePrice
 """
-
 from __future__ import annotations
 import argparse
 import sys
 
-from icecream import ic
-
-from sed_parser.extractor.base import SiteList, PageTypeList, CommandArgs
+from sed_parser.extractor.base import FormatList, SiteList, PageTypeList, CommandArgs
 from sed_parser.extractor.services import ExtractionOp
 
 
@@ -32,7 +29,12 @@ def setup_argument_parser() -> CommandArgs:
     )
     parser.add_argument(
         "--page-type",
-        help="The site this page is from, ex: `sharePrice`, ..more to come",
+        help="Type of page from this site, ex: `sharePrice`, ..more to come",
+        required=True,
+    )
+    parser.add_argument(
+        "--format",
+        help="Expected output format, ex: `csv`, ..more to come",
         required=True,
     )
 
@@ -46,11 +48,19 @@ def setup_argument_parser() -> CommandArgs:
             f"error: `--page-type {args.page_type}` not found in supported list."
         )
 
-    return CommandArgs(site=args.site, page_type=args.page_type, data=sys.stdin.read())
+    if args.format not in [item.value for item in FormatList]:
+        raise SystemExit(
+            f"error: `--format {args.format}` not found in supported list."
+        )
+
+    return CommandArgs(
+        site=args.site,
+        page_type=args.page_type,
+        format=args.format,
+        data=sys.stdin.read(),
+    )
 
 
 if __name__ == "__main__":
-    # input()
-
     c_args = setup_argument_parser()
     ExtractionOp.from_arg(c_args)
