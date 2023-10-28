@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 parsel = "*"
+typing-extensions = "*"
 
 [dev-packages]
 flake8 = "*"
