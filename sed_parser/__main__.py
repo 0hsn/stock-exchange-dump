@@ -10,20 +10,9 @@ sample use-case:
 
 from __future__ import annotations
 import argparse
-import typing
 
 from sed_parser.extractor.base import site_list, page_type_list
 
-
-class CommandArgs(typing.NamedTuple):
-    site: str
-    page_type: str
-
-    @staticmethod
-    def from_argparse_namespace(ns: argparse.Namespace) -> CommandArgs:
-        """create a CommandArgs from argparse.namespace"""
-
-        return CommandArgs(ns.site, ns.page_type)
 
 
 def setup_argument_parser() -> CommandArgs:

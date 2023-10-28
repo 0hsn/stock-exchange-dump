@@ -5,12 +5,20 @@ Extractor module
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from datetime import datetime
+import dataclasses
 
 from sed_parser.writer import FileWriter
 
 
 site_list = ["dse"]
 page_type_list = ["sharePrice"]
+@dataclasses.dataclass
+class CommandArgs:
+    """CommandArgs"""
+
+    site: str
+    page_type: str
+    data: object = ""
 
 
 class Content:
