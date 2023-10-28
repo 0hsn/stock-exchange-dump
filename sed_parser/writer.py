@@ -1,28 +1,48 @@
 """
 Writer module
 """
+
+# JsonStreamWriter
+# CsvStreamWriter
+
+
 import abc
-import csv
-import pathlib
+import sys
+
+import typing_extensions as tx
+
+from sed_parser.extractor.base import Content
 
 
-class FileWriter(abc.ABC):
-    """Base class for file writing utilities"""
+class StreamWriter:
+    """StreamWriter"""
+
+    def __init__(self) -> None:
+        """Constructor"""
+
+        self.stream = sys.stdout
+        self.content = ""
 
     @abc.abstractmethod
-    def write_file(self, file_path: pathlib.Path, content: Content):
-        """write_file interface"""
+    def format(self, content: Content) -> None:
+        """Print to given stream"""
+
+    def dump(self) -> None:
+        """dump"""
+        print(self.content, file=self.stream)
 
 
-class CsvFileWriter(FileWriter):
-    """CsvFileWriter"""
+class JsonStreamWriter(StreamWriter):
+    """JsonStreamWriter"""
 
-    def write_file(self, file_path: pathlib.Path, content: CsvContent):
-        """Write to given csv file"""
+    @tx.override
+    def format(self, content: Content) -> None:
+        return super().format(content)
 
-        file_to_write = str(file_path.resolve())
-        with open(file_to_write, encoding="utf8") as resource:
-            csv_writer = csv.writer(resource)
 
-            csv_writer.writerow(content.header)
-            csv_writer.writerows(content.body)
+class CsvStreamWriter(StreamWriter):
+    """CsvStreamWriter"""
+
+    @tx.override
+    def format(self, content: Content) -> None:
+        return super().format(content)
