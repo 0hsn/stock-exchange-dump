@@ -10,6 +10,7 @@ sample use-case:
 
 from __future__ import annotations
 import argparse
+import sys
 
 
 from sed_parser.extractor.base import SiteList, PageTypeList, CommandArgs
@@ -43,7 +44,7 @@ def setup_argument_parser() -> CommandArgs:
             f"error: `--page-type {args.page_type}` not found in supported list."
         )
 
-    return CommandArgs.from_argparse_namespace(args)
+    return CommandArgs(site=args.site, page_type=args.page_type, data=sys.stdin.read())
 
 
 if __name__ == "__main__":
