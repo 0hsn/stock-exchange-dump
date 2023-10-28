@@ -59,6 +59,9 @@ class Extractor(ABC):
     """Base Extractor"""
 
     def __init__(self, data: str) -> None:
+        if not data:
+            raise SystemExit("error: No data found.")
+
         self._data = data
 
     @abstractmethod
