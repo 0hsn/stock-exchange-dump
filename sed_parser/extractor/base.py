@@ -41,8 +41,8 @@ class Content:
     """Content"""
 
 
-class CsvContent(Content):
-    """CsvContent"""
+class TableContent(Content):
+    """TableContent"""
 
     def __init__(self, header: list[str], body: list[list[str]]) -> None:
         """Constructor"""

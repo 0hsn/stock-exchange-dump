@@ -3,13 +3,13 @@ Extractor module
 """
 from parsel import Selector
 
-from sed_parser.extractor.base import CsvContent, Extractor
+from sed_parser.extractor.base import TableContent, Extractor
 
 
 class SharePriceExtractor(Extractor):
     """SharePriceExtractor"""
 
-    def extract(self) -> CsvContent:
+    def extract(self) -> TableContent:
         """extract"""
 
         html = self._parser_price_table_()
@@ -17,7 +17,7 @@ class SharePriceExtractor(Extractor):
         header = self._parser_table_header_(html)
         body = self._parser_table_body_(html)
 
-        return CsvContent(header, body)
+        return TableContent(header, body)
 
     def _parser_price_table_(self) -> str:
         """parser price table"""
