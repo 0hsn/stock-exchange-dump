@@ -9,7 +9,7 @@ from sed_parser.extractor.base import CsvContent, Extractor
 class SharePriceExtractor(Extractor):
     """SharePriceExtractor"""
 
-    def extract(self) -> tuple[list, list[list[str]]]:
+    def extract(self) -> CsvContent:
         """extract"""
 
         html = self._parser_price_table_()
