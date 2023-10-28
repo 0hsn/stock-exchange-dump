@@ -11,8 +11,8 @@ sample use-case:
 from __future__ import annotations
 import argparse
 
-from sed_parser.extractor.base import site_list, page_type_list
 
+from sed_parser.extractor.base import SiteList, PageTypeList, CommandArgs
 
 
 def setup_argument_parser() -> CommandArgs:
@@ -35,11 +35,13 @@ def setup_argument_parser() -> CommandArgs:
 
     args: argparse.Namespace = parser.parse_args()
 
-    if args.site not in site_list:
-        raise SystemExit(f"`--site {args.site}` not found in supported list.")
+    if args.site not in [item.value for item in SiteList]:
+        raise SystemExit(f"error: `--site {args.site}` not found in supported list.")
 
-    if args.page_type not in page_type_list:
-        raise SystemExit(f"`--page-type {args.page_type}` not found in supported list.")
+    if args.page_type not in [item.value for item in PageTypeList]:
+        raise SystemExit(
+            f"error: `--page-type {args.page_type}` not found in supported list."
+        )
 
     return CommandArgs.from_argparse_namespace(args)
 

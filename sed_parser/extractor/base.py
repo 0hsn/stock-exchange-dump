@@ -9,9 +9,18 @@ import dataclasses
 
 from sed_parser.writer import FileWriter
 
+class SiteList(enum.Enum):
+    """SiteList"""
 
-site_list = ["dse"]
-page_type_list = ["sharePrice"]
+    DSE = "dse"
+
+
+class PageTypeList(enum.Enum):
+    """PageTypeList"""
+
+    SHARE_PRICE = "sharePrice"
+
+
 @dataclasses.dataclass
 class CommandArgs:
     """CommandArgs"""
