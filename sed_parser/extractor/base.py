@@ -6,6 +6,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 
 import dataclasses
+from datetime import datetime
 import enum
 
 
@@ -41,14 +42,22 @@ class Content:
     """Content"""
 
 
-class TableContent(Content):
-    """TableContent"""
+class PricePageContent(Content):
+    """PricePageContent"""
 
-    def __init__(self, header: list[str], body: list[list[str]]) -> None:
+    def __init__(self, date: str) -> None:
+        self.date_on_page: datetime = datetime.strptime(date, "%b %d, %Y at %H:%M %p")
+
+
+class PricePageTableContent(PricePageContent):
+    """PricePageTableContent"""
+
+    def __init__(self, header: list[str], body: list[list[str]], date: str) -> None:
         """Constructor"""
 
         self._header = header
         self._body = body
+        super().__init__(date)
 
     @property
     def header(self):
