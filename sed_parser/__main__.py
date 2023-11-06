@@ -11,8 +11,16 @@ from __future__ import annotations
 import argparse
 import sys
 
-from sed_parser.extractor.base import FormatList, SiteList, PageTypeList, CommandArgs
-from sed_parser.extractor.services import ExtractionOp
+from sed_parser.extractor.base import (
+    CommandSettings,
+    FormatList,
+    SiteList,
+    PageTypeList,
+    CommandArgs,
+)
+from sed_parser.extractor.services import ExtractionOp, get_config_parser
+
+CONFIG_PATH = "./settings.cfg"
 
 
 def setup_argument_parser() -> CommandArgs:
@@ -62,5 +70,9 @@ def setup_argument_parser() -> CommandArgs:
 
 
 if __name__ == "__main__":
+    cfg_parser = get_config_parser(CONFIG_PATH)
+
     c_args = setup_argument_parser()
-    ExtractionOp.from_arg(c_args)
+    c_settings = CommandSettings.from_config_parser(cfg_parser)
+
+    ExtractionOp.from_arg(c_args, c_settings)

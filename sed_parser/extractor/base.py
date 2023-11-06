@@ -4,6 +4,7 @@ Extractor module
 
 from __future__ import annotations
 from abc import ABC, abstractmethod
+from configparser import ConfigParser
 
 import dataclasses
 from datetime import datetime
@@ -36,6 +37,27 @@ class CommandArgs:
     page_type: str
     format: str
     data: object = ""
+
+
+@dataclasses.dataclass
+class CommandSettings:
+    """CommandSettings"""
+
+    share_price_path_fmt: str = dataclasses.field(default_factory=str)
+
+    @classmethod
+    def from_config_parser(cls, cfg_parser: ConfigParser) -> CommandSettings:
+        """from_config_parser"""
+
+        return CommandSettings(
+            cfg_parser.get("system.storage.dse", "share_price_path_fmt").strip('"')
+        )
+
+    @classmethod
+    def as_dict(cls) -> dict:
+        """return dictionary representation of class"""
+
+        return dataclasses.asdict(cls)
 
 
 class Content:
