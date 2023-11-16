@@ -6,6 +6,8 @@ from configparser import ConfigParser
 from sed_parser.extractor.base import (
     CommandArgs,
     CommandSettings,
+    DataFrameBuilder,
+    DataFrameMutator,
     SiteList,
     PageTypeList,
 )
@@ -39,6 +41,9 @@ class ExtractionOp:
 
         if extractor:
             content = extractor.extract()
+
+            df = DataFrameBuilder.from_price_page_table_content(content)
+            df = DataFrameMutator.make_stock_price_df(df)
 
             _s_stream_path = settings.share_price_path_fmt.format(
                 filename=content.date_on_page.strftime("%Y-%m-%d")
