@@ -138,7 +138,8 @@ class DataFrameBuilder:
     def from_price_page_table_content(content: PricePageTableContent) -> pd.DataFrame:
         """Convert content to data frame"""
 
-        return pd.DataFrame(content.body, columns=content.header)
+        df = pd.DataFrame(content.body, columns=content.header)
+        return DataFrameMutator.make_stock_price_df(df)
 
 
 class DataFrameMutator:
