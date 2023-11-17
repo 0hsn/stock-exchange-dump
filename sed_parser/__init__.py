@@ -13,7 +13,7 @@ from sed_parser.extractor.base import (
     PageTypeList,
     CommandArgs,
 )
-from sed_parser.extractor.services import ExtractionOp, get_config_parser
+from sed_parser.services import ExtractionOp, get_config_parser
 
 CONFIG_PATH = "./settings.cfg"
 

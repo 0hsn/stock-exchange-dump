@@ -7,7 +7,6 @@ from sed_parser.extractor.base import (
     CommandArgs,
     CommandSettings,
     DataFrameBuilder,
-    DataFrameMutator,
     PricePageTableContent,
     SiteList,
     PageTypeList,
