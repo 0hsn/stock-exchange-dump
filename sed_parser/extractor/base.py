@@ -110,6 +110,12 @@ class PricePageTableContent(PricePageContent):
 
         return self._body
 
+    @classmethod
+    def from_data_frame(cls, df: pd.DataFrame) -> PricePageTableContent:
+        """Create PricePageTableContent from data frame"""
+
+        return PricePageTableContent(df.columns.values.tolist(), df.values.tolist())
+
 
 class Extractor(ABC):
     """Base Extractor"""
