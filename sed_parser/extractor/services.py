@@ -8,6 +8,7 @@ from sed_parser.extractor.base import (
     CommandSettings,
     DataFrameBuilder,
     DataFrameMutator,
+    PricePageTableContent,
     SiteList,
     PageTypeList,
 )
@@ -43,14 +44,16 @@ class ExtractionOp:
             content = extractor.extract()
 
             df = DataFrameBuilder.from_price_page_table_content(content)
-            df = DataFrameMutator.make_stock_price_df(df)
+
+            content_upd = PricePageTableContent.from_data_frame(df)
+            content_upd.page_updated_date = content.page_updated_date
 
             _s_stream_path = settings.share_price_path_fmt.format(
                 filename=content.date_on_page.strftime("%Y-%m-%d")
             )
 
             writer = select_stream_writer(args.format, **dict(file=_s_stream_path))
-            writer.format(content)
+            writer.format(content_upd)
 
             return
 
