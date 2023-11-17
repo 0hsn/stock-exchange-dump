@@ -26,4 +26,8 @@ class DataFrameMutator:
         """make_stock_price_df"""
 
         # remove fields
-        return df.drop(columns=["#", "CHANGE"])
+        df = df.drop(columns=["#", "CHANGE"])
+
+        # replace all comma
+        columns = df.columns.values.tolist()
+        return df[columns].replace({",": ""}, regex=True)
