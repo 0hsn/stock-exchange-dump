@@ -91,12 +91,12 @@ class PricePageContent(Content):
 class PricePageTableContent(PricePageContent):
     """PricePageTableContent"""
 
-    def __init__(self, header: list[str], body: list[list[str]], date: str) -> None:
+    def __init__(self, header: list[str], body: list[list[str]]) -> None:
         """Constructor"""
 
         self._header = header
         self._body = body
-        super().__init__(date)
+        super().__init__()
 
     @property
     def header(self):
