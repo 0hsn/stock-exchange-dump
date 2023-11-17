@@ -18,7 +18,10 @@ class SharePriceExtractor(Extractor):
         body = self._parser_table_body_(html)
         date = self._parser_page_date_()
 
-        return PricePageTableContent(header, body, date)
+        content = PricePageTableContent(header, body)
+        content.page_updated_date = date
+
+        return content
 
     def _parser_price_table_(self) -> str:
         """parser price table"""
