@@ -35,15 +35,15 @@ class ExtractionOp:
             args.site == SiteList.DSE.value
             and args.page_type == PageTypeList.SHARE_PRICE.value
         ):
-            cls._process_share_price_extractor_(args, settings)
+            cls._process_share_price_extractor(args, settings)
         else:
             raise SystemExit("error: site or page-type mismatch.")
 
     @classmethod
-    def _process_share_price_extractor_(
+    def _process_share_price_extractor(
         cls, args: CommandArgs, settings: CommandSettings
     ) -> None:
-        """_process_share_price_extractor_"""
+        """_process_share_price_extractor"""
 
         extractor = SharePriceExtractor(args.data)
         content = extractor.extract()
