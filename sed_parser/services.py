@@ -4,6 +4,7 @@ Extractor service
 
 from configparser import ConfigParser
 import datetime
+import pathlib
 
 from sed_parser.extractor.base import (
     CommandArgs,
@@ -51,7 +52,7 @@ class ExtractionOp:
         content = extractor.extract()
 
         if content.date_on_page != datetime.datetime.now().date():
-            raise ValueError("content.date_on_page is not today.")
+            raise ValueError(f"date {content.date_on_page} on the page is not today.")
 
         df = DataFrameBuilder.from_price_page_table_content(content)
 
@@ -61,6 +62,11 @@ class ExtractionOp:
         _s_stream_path = settings.share_price_path_fmt.format(
             filename=content.date_on_page.strftime("%Y-%m-%d")
         )
+
+        _s_path = pathlib.Path(_s_stream_path)
+
+        if _s_path.exists():
+            raise FileExistsError(f"file `{_s_stream_path}` exists already.")
 
         writer = select_stream_writer(args.format, **dict(file=_s_stream_path))
         writer.format(content_upd)

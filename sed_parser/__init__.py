@@ -75,5 +75,5 @@ def run():
 
         ExtractionOp.from_arg(c_args, c_settings)
 
-    except ValueError as err:
+    except Exception as err:
         print(err, file=sys.stderr)
