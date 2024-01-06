@@ -15,12 +15,6 @@ jobs:
           ref: 'master'
           path: 'master-br'
 
-      - name: Get the code from master branch
-        uses: actions/checkout@v4
-        with:
-          ref: 'master'
-          path: 'master-br'
-
       - name: Set up Python 3.11.6
         uses: actions/setup-python@v5
         with:
@@ -31,10 +25,10 @@ jobs:
         run: cd ./master-br && pip install -r requirements.txt
 
       - name: Parse the page
-        run: bash scripts/fetchSharePrice.sh
+        run: cd ./master-br && bash scripts/fetchSharePrice.sh
 
       - name: Get filepath of newly added file
         run: echo "added_file=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
 
       - name: Get untracked filepath ${{ steps.vars.outputs.added_file }}
-        run: ls -lah
+        run: pwd
