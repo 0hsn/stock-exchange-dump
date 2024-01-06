@@ -67,9 +67,13 @@ def setup_argument_parser() -> CommandArgs:
 def run():
     """Driver function"""
 
-    cfg_parser = get_config_parser(CONFIG_PATH)
+    try:
+        cfg_parser = get_config_parser(CONFIG_PATH)
 
-    c_args = setup_argument_parser()
-    c_settings = CommandSettings.from_config_parser(cfg_parser)
+        c_args = setup_argument_parser()
+        c_settings = CommandSettings.from_config_parser(cfg_parser)
 
-    ExtractionOp.from_arg(c_args, c_settings)
+        ExtractionOp.from_arg(c_args, c_settings)
+
+    except ValueError as err:
+        print(err, file=sys.stderr)

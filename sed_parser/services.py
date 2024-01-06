@@ -1,7 +1,9 @@
 """
 Extractor service
 """
+
 from configparser import ConfigParser
+import datetime
 
 from sed_parser.extractor.base import (
     CommandArgs,
@@ -47,6 +49,9 @@ class ExtractionOp:
 
         extractor = SharePriceExtractor(args.data)
         content = extractor.extract()
+
+        if content.date_on_page != datetime.datetime.now().date():
+            raise ValueError("content.date_on_page is not today.")
 
         df = DataFrameBuilder.from_price_page_table_content(content)
 
