@@ -28,9 +28,7 @@ jobs:
             cache: 'pip'
 
       - name: Set up Python packages
-        run: |
-          cd ./master-br
-          && pip install -r requirements.txt
+        run: cd ./master-br && pip install -r requirements.txt
 
       - name: Parse the page
         run: bash scripts/fetchSharePrice.sh
