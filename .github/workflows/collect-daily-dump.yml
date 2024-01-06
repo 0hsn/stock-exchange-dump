@@ -5,8 +5,9 @@ on:
 
 jobs:
   collect_dump:
-    name: Collect daily dump for latest share price form DSEBD
+    name: Collect daily dump for latest share price from DSEBD.ORG
     runs-on: ubuntu-22.04
+
     steps:
       - name: Get current date
         id: date
