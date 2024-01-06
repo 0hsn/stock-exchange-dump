@@ -20,6 +20,6 @@ jobs:
         with:
             python-version: '3.11.6'
             cache: 'pip'
-        
-      - name:
-        run: cd ./master-br && pip install -r requirements.txt && ls
+
+      - name: Set up Python packages
+        run: cd ./master-br && pip install -r requirements.txt && ls -lah
