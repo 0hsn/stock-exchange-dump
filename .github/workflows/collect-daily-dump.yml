@@ -1,0 +1,25 @@
+name: Collect daily dump
+
+on:
+  workflow_dispatch: ~
+
+jobs:
+  collect_dump:
+    name: Collect daily dump for latest share price from DSEBD.ORG
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Get the code from master branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'master'
+          path: 'master-br'
+
+      - name: Set up Python 3.11.6
+        uses: actions/setup-python@v5
+        with:
+            python-version: '3.11.6'
+            cache: 'pip'
+        
+      - name:
+        run: cd ./master-br && pip install -r requirements.txt && ls
