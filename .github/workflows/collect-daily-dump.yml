@@ -13,7 +13,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: 'ci/daily-dump-01'
-          path: 'master-br'
 
       - name: Set up Python 3.11.6
         uses: actions/setup-python@v5
@@ -22,31 +21,29 @@ jobs:
             cache: 'pip'
 
       - name: Set up Python packages
-        run: |
-          cd ./master-br
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Fetch and parse the page, then update the added_file path
         id: outdata
         run: |
-          cd ./master-br
           bash scripts/fetchSharePrice.sh
           echo "added_file=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
           ls -lah ./dumps/dse/share_price/
 
       - name: Commit newly added file ${{ steps.outdata.outputs.added_file }}
         run: |
-          cd ./master-br
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          BRANCH="dump-files/dse-stock-price-$(date +'%Y-%m-%d')"
+          git checkout -b $BRANCH
           git add .
           git commit -u -m "Add DSE stock price for $(date +'%Y-%m-%d')"
+          echo "pr_branch=$BRANCH" >> $GITHUB_OUTPUT
         if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
 
       - name: GitHub push the file
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: master
-          directory: master-br
+          branch: ${{ steps.outdata.outputs.pr_branch }}
         if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
