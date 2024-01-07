@@ -28,7 +28,8 @@ jobs:
         run: cd ./master-br && bash scripts/fetchSharePrice.sh
 
       - name: Get filepath of newly added file
+        id: outdata
         run: cd ./master-br && echo "added_file=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
 
-      - name: Get untracked filepath ${{ steps.vars.outputs.added_file }}
-        run: cd ./master-br && echo ${{ steps.vars.outputs.added_file }}
+      - name: Get untracked filepath ${{ steps.outdata.outputs.added_file }}
+        run: cd ./master-br && echo ${{ steps.outdata.outputs.added_file }}
