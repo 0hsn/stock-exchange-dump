@@ -31,7 +31,7 @@ jobs:
         run: |
           cd ./master-br
           bash scripts/fetchSharePrice.sh
-          echo "added_file=$(pwd)/$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
+          echo "added_file=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
           ls -lah ./dumps/dse/share_price/
 
       - name: Commit newly added file ${{ steps.outdata.outputs.added_file }} to dump-files branch
