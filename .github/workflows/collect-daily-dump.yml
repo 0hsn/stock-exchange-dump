@@ -31,4 +31,4 @@ jobs:
         run: cd ./master-br && echo "added_file=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
 
       - name: Get untracked filepath ${{ steps.vars.outputs.added_file }}
-        run: cd ./master-br && pwd
+        run: cd ./master-br && echo ${{ steps.vars.outputs.added_file }}
