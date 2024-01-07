@@ -32,25 +32,20 @@ jobs:
           cd ./master-br
           bash scripts/fetchSharePrice.sh \
           echo "added_file=$(pwd)/$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
-
-      - name: Get the code from dump-files branch
-        run: |
-          git clone --filter=blob:none --depth=1 --single-branch -b dump-files git@github.com:0hsn/stock-exchange-dump.git dump-files
-          cd ./dump-files
-          cp ${{ steps.outdata.outputs.added_file }} dumps/dse/share_price/
-          ls -lash dumps/dse/share_price/
-        if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
+          ls -lah ./dumps/dse/share_price/
 
       - name: Commit newly added file ${{ steps.outdata.outputs.added_file }} to dump-files branch
         run: |
-          cd ./dump-files
+          cd ./master-br
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -a -m "Add DSE stock price for $(date +'%Y-%m-%d')"
+        if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
 
       - name: GitHub Push to dump-files branch
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: dump-files
-          directory: dump-files
+          branch: master
+          directory: master
+        if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
