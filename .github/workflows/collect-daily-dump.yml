@@ -45,6 +45,6 @@ jobs:
       - name: GitHub push the file to ${{ steps.prbranch.outputs.pr_branch }}
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT_0HSN }}
           branch: ${{ steps.prbranch.outputs.pr_branch }}
         if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
