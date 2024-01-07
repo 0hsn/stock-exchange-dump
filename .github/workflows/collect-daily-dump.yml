@@ -30,7 +30,7 @@ jobs:
         id: outdata
         run: |
           cd ./master-br
-          bash scripts/fetchSharePrice.sh \
+          bash scripts/fetchSharePrice.sh
           echo "added_file=$(pwd)/$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
           ls -lah ./dumps/dse/share_price/
 
