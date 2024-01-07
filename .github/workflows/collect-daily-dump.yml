@@ -34,7 +34,7 @@ jobs:
           echo "added_file=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
           ls -lah ./dumps/dse/share_price/
 
-      - name: Commit newly added file ${{ steps.outdata.outputs.added_file }} to dump-files branch
+      - name: Commit newly added file ${{ steps.outdata.outputs.added_file }}
         run: |
           cd ./master-br
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -42,7 +42,7 @@ jobs:
           git commit -a -m "Add DSE stock price for $(date +'%Y-%m-%d')"
         if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
 
-      - name: GitHub Push to dump-files branch
+      - name: GitHub push the file
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
