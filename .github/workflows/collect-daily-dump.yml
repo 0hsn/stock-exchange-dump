@@ -12,7 +12,7 @@ jobs:
       - name: Get the code from master branch
         uses: actions/checkout@v4
         with:
-          ref: 'master'
+          ref: 'ci/daily-dump-01'
           path: 'master-br'
 
       - name: Set up Python 3.11.6
