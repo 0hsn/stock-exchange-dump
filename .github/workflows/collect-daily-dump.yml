@@ -28,7 +28,8 @@ jobs:
         run: |
           bash scripts/fetchSharePrice.sh
           echo "added_file=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
-          ls -lah ./dumps/dse/share_price/
+          echo "commit_msg=Add DSE stock price for $(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+          echo "pr_branch=dump-files/dse-stock-price-$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       # - name: Commit newly added file ${{ steps.outdata.outputs.added_file }}
       #   id: prbranch
@@ -55,6 +56,8 @@ jobs:
         with:
           default_author: github_actions
           fetch: false
-          message: "Add DSE stock price for $(date +'%Y-%m-%d')"
-          new_branch: "dump-files/dse-stock-price-$(date +'%Y-%m-%d')"
+          message: ${{ steps.prbranch.outputs.commit_msg }}
+          new_branch: ${{ steps.prbranch.outputs.pr_branch }}
+        
+        if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
 
