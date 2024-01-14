@@ -30,21 +30,31 @@ jobs:
           echo "added_file=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
           ls -lah ./dumps/dse/share_price/
 
-      - name: Commit newly added file ${{ steps.outdata.outputs.added_file }}
-        id: prbranch
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          BRANCH="dump-files/dse-stock-price-$(date +'%Y-%m-%d')"
-          git checkout -b $BRANCH
-          git add .
-          git commit -u -m "Add DSE stock price for $(date +'%Y-%m-%d')"
-          echo "pr_branch=$BRANCH" >> $GITHUB_OUTPUT
-        if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
+      # - name: Commit newly added file ${{ steps.outdata.outputs.added_file }}
+      #   id: prbranch
+      #   run: |
+      #     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      #     git config --local user.name "github-actions[bot]"
+      #     BRANCH="dump-files/dse-stock-price-$(date +'%Y-%m-%d')"
+      #     git checkout -b $BRANCH
+      #     git add .
+      #     git commit -u -m "Add DSE stock price for $(date +'%Y-%m-%d')"
+      #     echo "pr_branch=$BRANCH" >> $GITHUB_OUTPUT
+          
+      #   if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
 
-      - name: GitHub push the file to ${{ steps.prbranch.outputs.pr_branch }}
-        uses: ad-m/github-push-action@master
+      # - name: GitHub push file ${{ steps.outdata.outputs.added_file }} to ${{ steps.prbranch.outputs.pr_branch }}
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.PAT_0HSN }}
+      #     branch: ${{ steps.prbranch.outputs.pr_branch }}
+      #   if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
+      
+      - name: Push file ${{ steps.outdata.outputs.added_file }}
+        uses: EndBug/add-and-commit@v9
         with:
-          github_token: ${{ secrets.PAT_0HSN }}
-          branch: ${{ steps.prbranch.outputs.pr_branch }}
-        if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
+          default_author: github_actions
+          fetch: false
+          message: "Add DSE stock price for $(date +'%Y-%m-%d')"
+          new_branch: "dump-files/dse-stock-price-$(date +'%Y-%m-%d')"
+
