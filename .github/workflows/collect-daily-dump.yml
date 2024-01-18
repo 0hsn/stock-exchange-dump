@@ -42,13 +42,15 @@ jobs:
 
       - name: Set up Python packages
         run: |
-          cd ${{ env.PT_CODE }}
+          cd $PT_CODE
           pip install -r requirements.txt
 
       - name: Fetch and parse the page, then update the added_file path
         run: |
-          cd ${{ env.PT_CODE }}
+          cd $PT_CODE
           bash scripts/fetchSharePrice.sh
+          git status -u
+          echo $(git ls-files --others --exclude-standard)
           echo "FL_DUMP=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
 
       - name: Get the code from file dump branch
