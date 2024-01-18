@@ -27,12 +27,12 @@ jobs:
       - name: Dynamically set MY_DATE environment variable
         run: echo "DT_TODY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
-      - name: Get the code from code branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ env.BR_CODE }}
-          # token: ''
-          path: ${{ env.PT_CODE }}
+      # - name: Get the code from code branch
+      #   uses: actions/checkout@v4
+      #   with:
+      #     ref: ${{ env.BR_DUMP }}
+      #     # token: ''
+      #     path: ${{ env.PT_DUMP }}
 
       - name: Set up Python 3.11.7
         uses: actions/setup-python@v5
@@ -53,12 +53,12 @@ jobs:
           echo $(git ls-files --others --exclude-standard)
           echo "FL_DUMP=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
 
-      - name: Get the code from file dump branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ env.BR_DUMP }}
-          # token: ''
-          path: ${{ env.PT_DUMP }}
+      # - name: Get the code from file dump branch
+      #   uses: actions/checkout@v4
+      #   with:
+      #     ref: ${{ env.BR_DUMP }}
+      #     # token: ''
+      #     path: ${{ env.PT_DUMP }}
   
       - name: Copy create dump to dump path
         run: |
