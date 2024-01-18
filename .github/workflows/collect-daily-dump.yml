@@ -67,6 +67,9 @@ jobs:
           echo $PT_CODE/$FL_DUMP
           echo $PT_DUMP/$(dirname $FL_DUMP)
 
+          echo "date: $DT_TODY"
+          echo "date: ${{ env.DT_TODY }}"
+
       # - name: Push file ${{ env.FL_DUMP }}
       #   uses: EndBug/add-and-commit@v9
       #   if: ${{ endsWith(env.FL_DUMP, '.csv') }}
