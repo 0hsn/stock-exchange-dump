@@ -62,7 +62,8 @@ jobs:
 
       - name: Copy create dump to dump path
         run: |
-          cp "${{ env.PT_CODE }}/${{ env.FL_DUMP }}" "${{ env.PT_DUMP }}/$(dirname ${{ env.FL_DUMP }})"
+          echo $FL_DUMP
+          echo ${{env.FL_DUMP}}
 
           echo $PT_CODE/$FL_DUMP
           echo $PT_DUMP/$(dirname $FL_DUMP)
