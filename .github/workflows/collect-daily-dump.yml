@@ -67,6 +67,7 @@ jobs:
           git status -u
 
       - name: Push file ${{ env.FL_DUMP }}
+        id: pushout
         uses: EndBug/add-and-commit@v9
         if: ${{ endsWith(env.FL_DUMP, '.csv') }}
         with:
@@ -75,3 +76,10 @@ jobs:
           message: ${{ env.COMMIT_MSG }} ${{ env.DT_TODY }}
           new_branch: ${{ env.BR_DUMP_PR }}-${{ env.DT_TODY }}
           cwd: "./${{env.BR_DUMP}}"
+
+      - name: Create PR to ${{env.BR_DUMP}}
+        if: steps.pushout.outputs.pushed == true
+        env:
+          GH_TOKEN: ${{ secrets.CI_PAT }}
+        run: |
+          gh pr create -B ${{env.BR_DUMP}} -H "${{ env.BR_DUMP_PR }}-${{ env.DT_TODY }}" -f
