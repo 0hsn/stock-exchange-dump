@@ -14,7 +14,7 @@ jobs:
       # BR_CODE: "master"
       BR_CODE: "ci/daily-dump-01"
       BR_DUMP: "dump-files"
-      BR_DUMP_PR: "dump-files/dse-stock-price"
+      BR_DUMP_PR: "new-files/dse-stock-price"
 
       FL_DUMP: ""
 
