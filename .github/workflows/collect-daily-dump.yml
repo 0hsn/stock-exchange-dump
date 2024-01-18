@@ -62,8 +62,8 @@ jobs:
         run: |
           # cp "${{ env.PT_CODE }}/${{ env.FL_DUMP }}" "${{ env.PT_DUMP }}/$(dirname ${{ env.FL_DUMP }})"
 
-          echo "${{ env.PT_CODE }}/${{ env.FL_DUMP }}"
-          echo "${{ env.PT_DUMP }}/$(dirname ${{ env.FL_DUMP }})"
+          echo $PT_CODE/$FL_DUMP
+          echo $PT_DUMP/$(dirname $FL_DUMP)
 
       # - name: Push file ${{ env.FL_DUMP }}
       #   uses: EndBug/add-and-commit@v9
