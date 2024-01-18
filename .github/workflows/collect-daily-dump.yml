@@ -51,7 +51,7 @@ jobs:
           bash scripts/fetchSharePrice.sh
           git status -u
           echo $(git ls-files --others --exclude-standard)
-          echo "FL_DUMP=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
+          echo "FL_DUMP=$(git ls-files --others --exclude-standard)" >> $GITHUB_ENV
 
       # - name: Get the code from file dump branch
       #   uses: actions/checkout@v4
