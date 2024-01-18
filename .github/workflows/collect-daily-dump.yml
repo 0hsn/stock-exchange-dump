@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ env.BR_CODE }}
-          token: ''
+          # token: ''
           path: ${{ env.PT_CODE }}
 
       - name: Set up Python 3.11.7
@@ -53,7 +53,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ env.BR_DUMP }}
-          token: ''
+          # token: ''
           path: ${{ env.PT_DUMP }}
   
       - name: Copy create dump to dump path
