@@ -72,3 +72,4 @@ jobs:
           fetch: false
           message: ${{ env.COMMIT_MSG }} ${{ env.DT_TODY }}
           new_branch: ${{ env.BR_DUMP_PR }}-${{ env.DT_TODY }}
+          cwd: "./${{env.BR_DUMP}}"
