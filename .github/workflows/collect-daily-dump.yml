@@ -47,6 +47,7 @@ jobs:
 
       - name: Fetch and parse the page, then update the added_file path
         run: |
+          cd $PT_CODE
           bash scripts/fetchSharePrice.sh
           echo "FL_DUMP=$(git ls-files --others --exclude-standard)" >> $GITHUB_ENV
 
