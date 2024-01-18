@@ -8,56 +8,66 @@ jobs:
     name: Collect daily dump for latest share price from DSEBD.ORG
     runs-on: ubuntu-22.04
 
+    env:
+      DT_TODY: ""
+
+      # BR_CODE: "master"
+      BR_CODE: "ci/daily-dump-01"
+      BR_DUMP: "dump-files"
+      BR_DUMP_PR: "dump-files/dse-stock-price"
+
+      FL_DUMP: ""
+
+      PT_CODE: "ci-daily-dump-01"
+      PT_DUMP: "dump-files"
+
+      COMMIT_MSG: "Add DSE stock price on date"
+
     steps:
-      - name: Get the code from master branch
+      - name: Dynamically set MY_DATE environment variable
+        run: echo "DT_TODY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Get the code from code branch
         uses: actions/checkout@v4
         with:
-          ref: 'ci/daily-dump-01'
+          ref: ${{ env.BR_CODE }}
+          token: ''
+          path: ${{ env.PT_CODE }}
 
-      - name: Set up Python 3.11.6
+      - name: Set up Python 3.11.7
         uses: actions/setup-python@v5
         with:
-            python-version: '3.11.6'
+            python-version: '3.11.7'
             cache: 'pip'
 
       - name: Set up Python packages
         run: pip install -r requirements.txt
 
       - name: Fetch and parse the page, then update the added_file path
-        id: outdata
         run: |
+          cd ${{ env.PT_CODE }}
           bash scripts/fetchSharePrice.sh
-          echo "added_file=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
-          echo "commit_msg=Add DSE stock price for $(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-          echo "pr_branch=dump-files/dse-stock-price-$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+          echo "FL_DUMP=$(git ls-files --others --exclude-standard)" >> $GITHUB_OUTPUT
 
-      # - name: Commit newly added file ${{ steps.outdata.outputs.added_file }}
-      #   id: prbranch
-      #   run: |
-      #     git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      #     git config --local user.name "github-actions[bot]"
-      #     BRANCH="dump-files/dse-stock-price-$(date +'%Y-%m-%d')"
-      #     git checkout -b $BRANCH
-      #     git add .
-      #     git commit -u -m "Add DSE stock price for $(date +'%Y-%m-%d')"
-      #     echo "pr_branch=$BRANCH" >> $GITHUB_OUTPUT
-          
-      #   if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
-
-      # - name: GitHub push file ${{ steps.outdata.outputs.added_file }} to ${{ steps.prbranch.outputs.pr_branch }}
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.PAT_0HSN }}
-      #     branch: ${{ steps.prbranch.outputs.pr_branch }}
-      #   if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
-      
-      - name: Push file ${{ steps.outdata.outputs.added_file }}
-        uses: EndBug/add-and-commit@v9
+      - name: Get the code from file dump branch
+        uses: actions/checkout@v4
         with:
-          default_author: github_actions
-          fetch: false
-          message: ${{ steps.outdata.outputs.commit_msg }}
-          new_branch: ${{ steps.outdata.outputs.pr_branch }}
-        
-        if: ${{ endsWith(steps.outdata.outputs.added_file, '.csv') }}
+          ref: ${{ env.BR_DUMP }}
+          token: ''
+          path: ${{ env.PT_DUMP }}
+  
+      - name: Copy create dump to dump path
+        run: |
+          # cp "${{ env.PT_CODE }}/${{ env.FL_DUMP }}" "${{ env.PT_DUMP }}/$(dirname ${{ env.FL_DUMP }})"
 
+          echo "${{ env.PT_CODE }}/${{ env.FL_DUMP }}"
+          echo "${{ env.PT_DUMP }}/$(dirname ${{ env.FL_DUMP }})"
+
+      # - name: Push file ${{ env.FL_DUMP }}
+      #   uses: EndBug/add-and-commit@v9
+      #   if: ${{ endsWith(env.FL_DUMP, '.csv') }}
+      #   with:
+      #     default_author: github_actions
+      #     fetch: false
+      #     message: ${{ env.COMMIT_MSG }} ${{ env.DT_TODY }}
+      #     new_branch: ${{ env.BR_DUMP_PR }}-${{ env.DT_TODY }}
