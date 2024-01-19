@@ -3,7 +3,7 @@ name: Collect daily dump
 on:
   workflow_dispatch: ~
   schedule:
-    - cron: '23 16 * * 0-4'
+    - cron: '30 10 * * 0-4'
 
 jobs:
   collect_dump:
