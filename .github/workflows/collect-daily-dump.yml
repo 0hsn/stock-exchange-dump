@@ -27,7 +27,9 @@ jobs:
 
     steps:
       - name: Dynamically set MY_DATE environment variable
-        run: echo "DT_TODY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+        run: |
+          echo "DT_TODY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          echo $(date +'%Y-%m-%d %H:%M:%S')
 
       - name: Get the code from code branch
         uses: actions/checkout@v4
