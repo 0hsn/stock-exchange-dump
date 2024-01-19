@@ -1,9 +1,9 @@
-name: Collect daily dump
+name: Daily dump - DES - Stock price
 
 on:
   workflow_dispatch: ~
   schedule:
-    - cron: '30 10 * * 0-4'
+    - cron: '0 10 * * 0-4'
 
 jobs:
   collect_dump:
@@ -13,14 +13,13 @@ jobs:
     env:
       DT_TODY: ""
 
-      # BR_CODE: "master"
-      BR_CODE: "ci/daily-dump-01"
+      BR_CODE: "master"
       BR_DUMP: "dump-files"
       BR_DUMP_PR: "new-files/dse-stock-price"
 
       FL_DUMP: ""
 
-      PT_CODE: "ci-daily-dump-01"
+      PT_CODE: "master"
       PT_DUMP: "dump-files"
 
       COMMIT_MSG: "Add DSE stock price on date"
