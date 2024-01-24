@@ -51,7 +51,7 @@ class ExtractionOp:
         extractor = SharePriceExtractor(args.data)
         content = extractor.extract()
 
-        if content.date_on_page != datetime.datetime.now().date():
+        if content.date_on_page.date() != datetime.datetime.now().date():
             raise ValueError(f"date {content.date_on_page} on the page is not today.")
 
         df = DataFrameBuilder.from_price_page_table_content(content)
