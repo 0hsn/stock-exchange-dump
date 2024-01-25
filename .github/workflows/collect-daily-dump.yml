@@ -3,7 +3,7 @@ name: Daily dump - DES - Stock price
 on:
   workflow_dispatch: ~
   schedule:
-    - cron: '0 10 * * 0-4'
+    - cron: "0 10 * * 0-4"
 
 jobs:
   collect_dump:
@@ -24,6 +24,9 @@ jobs:
 
       COMMIT_MSG: "Add DSE stock price on date"
 
+      DSE_STOCK_PRICE_PAGE: "https://www.dsebd.org/latest_share_price_scroll_l.php"
+      CMD_STOCK_PRICE_PAGE: "python -m sed_parser --site dse --page-type sharePrice --format csv"
+
     steps:
       - name: Dynamically set MY_DATE environment variable
         run: |
@@ -40,8 +43,8 @@ jobs:
       - name: Set up Python 3.11.7
         uses: actions/setup-python@v5
         with:
-            python-version: '3.11.7'
-            cache: 'pip'
+          python-version: "3.11.7"
+          cache: "pip"
 
       - name: Set up Python packages
         run: |
@@ -51,7 +54,7 @@ jobs:
       - name: Fetch and parse the page, then update the added_file path
         run: |
           cd $PT_CODE
-          bash scripts/fetchSharePrice.sh
+          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s | ${{ env.CMD_STOCK_PRICE_PAGE }}
           echo "FL_DUMP=$(git ls-files --others --exclude-standard)" >> $GITHUB_ENV
 
       - name: Get the code from file dump branch
