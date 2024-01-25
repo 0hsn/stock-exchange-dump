@@ -1,4 +1,4 @@
-name: Daily dump - DES - Stock price
+name: Dump daily - DES - Stock price
 
 on:
   workflow_dispatch: ~
@@ -13,14 +13,10 @@ jobs:
     env:
       DT_TODY: ""
 
-      BR_CODE: "master"
-      BR_DUMP: "dump-files"
+      BR_DUMP: "master"
       BR_DUMP_PR: "new-files/dse-stock-price"
 
       FL_DUMP: ""
-
-      PT_CODE: "master"
-      PT_DUMP: "dump-files"
 
       COMMIT_MSG: "Add DSE stock price on date"
 
@@ -31,14 +27,12 @@ jobs:
       - name: Dynamically set MY_DATE environment variable
         run: |
           echo "DT_TODY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-          echo $(date +'%Y-%m-%d %H:%M:%S')
+          echo $(date +'%Y-%m-%d')
 
       - name: Get the code from code branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.BR_CODE }}
           token: ${{ secrets.CI_PAT }}
-          path: ${{ env.PT_CODE }}
 
       - name: Set up Python 3.11.7
         uses: actions/setup-python@v5
@@ -47,32 +41,15 @@ jobs:
           cache: "pip"
 
       - name: Set up Python packages
-        run: |
-          cd $PT_CODE
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
-      - name: Fetch and parse the page, then update the added_file path
+      - name: Fetch and parse the page, then update the `FL_DUMP` path
         run: |
-          cd $PT_CODE
           curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s | ${{ env.CMD_STOCK_PRICE_PAGE }}
           echo "FL_DUMP=$(git ls-files --others --exclude-standard)" >> $GITHUB_ENV
-
-      - name: Get the code from file dump branch
-        uses: actions/checkout@v4
-        if: ${{ endsWith(env.FL_DUMP, '.csv') }}
-        with:
-          ref: ${{ env.BR_DUMP }}
-          token: ${{ secrets.CI_PAT }}
-          path: ${{ env.PT_DUMP }}
-
-      - name: Copy create dump to dump path
-        if: ${{ endsWith(env.FL_DUMP, '.csv') }}
-        run: |
-          cp "$PT_CODE/$FL_DUMP" "$PT_DUMP/$(dirname $FL_DUMP)"
-          cd ${{ env.PT_DUMP }}
           git status -u
 
-      - name: Push file ${{ env.FL_DUMP }}
+      - name: Push file `${{ env.FL_DUMP }}`
         id: pushout
         uses: EndBug/add-and-commit@v9
         if: ${{ endsWith(env.FL_DUMP, '.csv') }}
@@ -81,12 +58,10 @@ jobs:
           fetch: false
           message: ${{ env.COMMIT_MSG }} ${{ env.DT_TODY }}
           new_branch: ${{ env.BR_DUMP_PR }}-${{ env.DT_TODY }}
-          cwd: "./${{env.BR_DUMP}}"
 
-      - name: Create PR to ${{env.BR_DUMP}}
+      - name: Create PR to `${{env.BR_DUMP}}`
         if: ${{ steps.pushout.outputs.pushed == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.CI_PAT }}
         run: |
-          cd ${{ env.PT_DUMP }}
           gh pr create -B ${{env.BR_DUMP}} -H "${{ env.BR_DUMP_PR }}-${{ env.DT_TODY }}" -f
