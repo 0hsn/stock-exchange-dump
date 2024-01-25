@@ -1,4 +1,4 @@
-name: Dump daily - DES - Stock price
+name: Dump daily - DSE - Stock price
 
 on:
   workflow_dispatch: ~
