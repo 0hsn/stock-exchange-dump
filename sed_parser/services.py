@@ -51,9 +51,6 @@ class ExtractionOp:
         extractor = SharePriceExtractor(args.data)
         content = extractor.extract()
 
-        if content.date_on_page != datetime.datetime.now().date():
-            raise ValueError(f"date {content.date_on_page} on the page is not today.")
-
         df = DataFrameBuilder.from_price_page_table_content(content)
 
         content_upd = PricePageTableContent.from_data_frame(df)
@@ -64,9 +61,6 @@ class ExtractionOp:
         )
 
         _s_path = pathlib.Path(_s_stream_path)
-
-        if _s_path.exists():
-            raise FileExistsError(f"file `{_s_stream_path}` exists already.")
 
         writer = select_stream_writer(args.format, **dict(file=_s_stream_path))
         writer.format(content_upd)

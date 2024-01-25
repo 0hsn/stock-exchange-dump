@@ -84,7 +84,7 @@ class PricePageContent(Content):
         self.date_on_page = (
             date_
             if isinstance(date_, datetime)
-            else datetime.strptime(date_, "%b %d, %Y at %H:%M %p")
+            else datetime.strptime(date_, "%b %d, %Y at %I:%M %p")
         )
 
 
