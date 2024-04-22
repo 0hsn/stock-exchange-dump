@@ -26,7 +26,7 @@
         },
         "hence": {
             "git": "git+https://github.com/0hsn/hence.git",
-            "ref": "7d35242dc6ab34c080fd84a5cf96cec9e1062e90"
+            "ref": "0d1de8dd80119414e377bf8237567d80b43433e8"
         },
         "jmespath": {
             "hashes": [
@@ -945,11 +945,11 @@
         },
         "jupyterlab-server": {
             "hashes": [
-                "sha256:54622cbd330526a385ee0c1fdccdff3a1e7219bf3e864a335284a1270a1973df",
-                "sha256:9b3ba91cf2837f7f124fca36d63f3ca80ace2bed4898a63dd47e6598c1ab006f"
+                "sha256:1dbf26210c2426bca6164c0df57da85ec711aeeed4480dee1cf66501f06292c3",
+                "sha256:b03382075545981dd0ab7a9e4ffff74b6ed2b424c92e32fcc1c0bd65dafcb56d"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==2.26.0"
+            "version": "==2.27.0"
         },
         "markupsafe": {
             "hashes": [
