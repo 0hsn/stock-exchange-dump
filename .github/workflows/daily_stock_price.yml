@@ -21,6 +21,7 @@ jobs:
 
       PT_CODE: "master"
       PT_DUMP: "dump-files"
+      PT_TMP: "tmp-files"
 
       COMMIT_MSG: "Add DSE stock price on date"
 
@@ -32,6 +33,11 @@ jobs:
         run: |
           echo "DT_TODY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
           echo $(date +'%Y-%m-%d')
+
+      - name: Downloading the price page
+        run: |
+          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s > ./${{ env.PT_TMP}}/dse-${{ env.DT_TODY }}.html
+          ls -lah ./${{ env.PT_TMP}}/
 
       - name: Get the code from code branch
         uses: actions/checkout@v4
