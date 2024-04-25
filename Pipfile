@@ -7,6 +7,7 @@ name = "pypi"
 parsel = "*"
 typing-extensions = "*"
 pandas = "*"
+hence = {git = "git+https://github.com/0hsn/hence.git", ref = "v0.8.0"}
 
 [dev-packages]
 flake8 = "*"
