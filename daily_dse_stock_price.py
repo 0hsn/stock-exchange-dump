@@ -8,7 +8,7 @@ import sys
 from pandas import DataFrame
 from parsel import Selector
 
-from hence import AbstractWork, WorkGroup, WorkList, WorkExecFrame, get_step_out
+from hence import AbstractWork, WorkGroup, WorkExecFrame, get_step_out
 
 import config
 
@@ -126,36 +126,34 @@ class PrepareCsvFilePath(AbstractWork):
 if __name__ == "__main__":
     data = sys.stdin.read()
 
-    wl_dse_parse = WorkList(
-        [
-            WorkExecFrame(
-                id_="parse_date_on_page",
-                function=ParseDateOnPage(),
-                function_params={"html": data},
-            ),
-            WorkExecFrame(
-                id_="parse_price_table",
-                function=ParsePriceTable(),
-                function_params={"html": data},
-            ),
-            WorkExecFrame(
-                id_="parse_price_table_headers",
-                function=ParsePriceTableHeaders(),
-            ),
-            WorkExecFrame(
-                id_="parse_price_table_body",
-                function=ParsePriceTableBody(),
-            ),
-            WorkExecFrame(
-                id_="prepare_csv_file_path",
-                function=PrepareCsvFilePath(),
-            ),
-            WorkExecFrame(
-                id_="transform_price_table_data",
-                function=TransformPriceTableData(),
-            ),
-        ]
-    )
+    wl_dse_parse = [
+        WorkExecFrame(
+            id_="parse_date_on_page",
+            function=ParseDateOnPage(),
+            function_params={"html": data},
+        ),
+        WorkExecFrame(
+            id_="parse_price_table",
+            function=ParsePriceTable(),
+            function_params={"html": data},
+        ),
+        WorkExecFrame(
+            id_="parse_price_table_headers",
+            function=ParsePriceTableHeaders(),
+        ),
+        WorkExecFrame(
+            id_="parse_price_table_body",
+            function=ParsePriceTableBody(),
+        ),
+        WorkExecFrame(
+            id_="prepare_csv_file_path",
+            function=PrepareCsvFilePath(),
+        ),
+        WorkExecFrame(
+            id_="transform_price_table_data",
+            function=TransformPriceTableData(),
+        ),
+    ]
 
     wg_dse = WorkGroup(wl_dse_parse)
     wg_dse.execute_dag()
