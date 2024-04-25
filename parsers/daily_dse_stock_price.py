@@ -10,7 +10,7 @@ from parsel import Selector
 
 from hence import AbstractWork, WorkGroup, WorkExecFrame, get_step_out
 
-import config
+from .config import SHARE_PRICE_PATH_FMT
 
 
 class ParseDateOnPage(AbstractWork):
@@ -120,7 +120,7 @@ class PrepareCsvFilePath(AbstractWork):
         date_str_ = get_step_out(kwargs, "parse_date_on_page")
         date_ = datetime.strptime(date_str_, "%b %d, %Y at %I:%M %p")
 
-        return config.SHARE_PRICE_PATH_FMT.format(filename=date_.strftime("%Y-%m-%d"))
+        return SHARE_PRICE_PATH_FMT.format(filename=date_.strftime("%Y-%m-%d"))
 
 
 if __name__ == "__main__":

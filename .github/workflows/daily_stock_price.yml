@@ -25,7 +25,7 @@ jobs:
       COMMIT_MSG: "Add DSE stock price on date"
 
       DSE_STOCK_PRICE_PAGE: "https://www.dsebd.org/latest_share_price_scroll_l.php"
-      CMD_STOCK_PRICE_PAGE: "python daily_dse_stock_price.py"
+      CMD_STOCK_PRICE_PAGE: "python -m parsers.daily_dse_stock_price"
 
     steps:
       - name: Dynamically set MY_DATE environment variable
