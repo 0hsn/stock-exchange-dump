@@ -37,14 +37,24 @@ jobs:
 
       - name: Downloading the price page
         run: |
-          file=./${{ env.PT_TMP}}/dse-stock-price-${{ env.DT_TODY }}.html
-          mkdir -p ./${{ env.PT_TMP}}/
-          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s > $file
+          # make file name
+          file=~/${{ env.PT_TMP}}/dse-stock-price-${{ env.DT_TODY }}.html
+
+          # create file dir
+          mkdir -p ~/${{ env.PT_TMP}}/ 
+
+          # get the file and store it
+          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s > $file 
+          
+          # export file path
           echo "FL_PRICE=$file" >> $GITHUB_ENV
 
       - name: Get the date from file and set it
         run: |
+          # get date time from the stored file
           dt_file=$(cat ${{ env.FL_PRICE }} | python -c "import sys; st_='Latest Share Price On '; in_=str(sys.stdin.read()); ds_=in_[in_.find(st_) + len(st_) : in_.find('</h2>', in_.find(st_) + len(st_))]; from datetime import datetime; d_=datetime.strptime(ds_, '%b %d, %Y at %I:%M %p'); print(d_.strftime('%Y-%m-%d'))")
+
+          # export file date
           echo "DT_FILE=$dt_file" >> $GITHUB_ENV
 
       # - name: Check if executes
