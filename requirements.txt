@@ -1,6 +1,6 @@
 -i https://pypi.org/simple
 cssselect==1.2.0; python_version >= '3.7'
-hence@ git+https://github.com/0hsn/hence.git@0d1de8dd80119414e377bf8237567d80b43433e8
+hence@ git+https://github.com/0hsn/hence.git@f84ede4ef9b6957d6748b25ac22b16e0b793a4f4
 jmespath==1.0.1; python_version >= '3.7'
 lxml==5.2.1; python_version >= '3.6'
 numpy==1.26.4; python_version == '3.11'
