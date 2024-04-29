@@ -57,10 +57,6 @@ jobs:
           # export file date
           echo "DT_FILE=$dt_file" >> $GITHUB_ENV
 
-      # - name: Check if executes
-      #   run: ls -lah
-      #   if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
-
       - name: Get the code from code branch
         uses: actions/checkout@v4
         with:
