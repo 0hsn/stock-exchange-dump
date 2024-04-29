@@ -12,6 +12,7 @@ jobs:
 
     env:
       DT_TODY: ""
+      DT_FILE: ""
 
       BR_CODE: "master"
       BR_DUMP: "dump-files"
@@ -36,8 +37,25 @@ jobs:
 
       - name: Downloading the price page
         run: |
-          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s > ./${{ env.PT_TMP}}/dse-${{ env.DT_TODY }}.html
-          ls -lah ./${{ env.PT_TMP}}/
+          # make file name
+          file=~/${{ env.PT_TMP}}/dse-stock-price-${{ env.DT_TODY }}.html
+
+          # create file dir
+          mkdir -p ~/${{ env.PT_TMP}}/ 
+
+          # get the file and store it
+          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s > $file 
+          
+          # export file path
+          echo "FL_PRICE=$file" >> $GITHUB_ENV
+
+      - name: Get the date from file and set it
+        run: |
+          # get date time from the stored file
+          dt_file=$(cat ${{ env.FL_PRICE }} | python -c "import sys; st_='Latest Share Price On '; in_=str(sys.stdin.read()); ds_=in_[in_.find(st_) + len(st_) : in_.find('</h2>', in_.find(st_) + len(st_))]; from datetime import datetime; d_=datetime.strptime(ds_, '%b %d, %Y at %I:%M %p'); print(d_.strftime('%Y-%m-%d'))")
+
+          # export file date
+          echo "DT_FILE=$dt_file" >> $GITHUB_ENV
 
       - name: Get the code from code branch
         uses: actions/checkout@v4
@@ -45,23 +63,27 @@ jobs:
           ref: ${{ env.BR_CODE }}
           token: ${{ secrets.CI_PAT }}
           path: ${{ env.PT_CODE }}
+        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
 
       - name: Set up Python 3.11.7
         uses: actions/setup-python@v5
         with:
           python-version: "3.11.7"
           cache: "pip"
+        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
 
       - name: Set up Python packages
         run: |
           cd $PT_CODE
           pip install -r requirements.txt
+        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
 
       - name: Fetch and parse the page, then update the added_file path
         run: |
           cd $PT_CODE
-          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s | ${{ env.CMD_STOCK_PRICE_PAGE }}
+          cat ${{ env.FL_PRICE }} | ${{ env.CMD_STOCK_PRICE_PAGE }}
           echo "FL_DUMP=$(git ls-files --others --exclude-standard)" >> $GITHUB_ENV
+        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
 
       - name: Get the code from file dump branch
         uses: actions/checkout@v4
