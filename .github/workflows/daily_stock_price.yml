@@ -36,9 +36,8 @@ jobs:
 
       - name: Downloading the price page
         run: |
-          file=${{ env.PT_TMP}}/dse-stock-price-${{ env.DT_TODY }}.html
-          touch ./$file
-          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s > ./$file
+          mkdir -p ./${{ env.PT_TMP}}/
+          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s > ./${{ env.PT_TMP}}/dse-stock-price-${{ env.DT_TODY }}.html
           ls -lah ./${{ env.PT_TMP}}/
 
       # - name: Get the code from code branch
