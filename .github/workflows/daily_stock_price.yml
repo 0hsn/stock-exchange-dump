@@ -12,6 +12,7 @@ jobs:
 
     env:
       DT_TODY: ""
+      DT_FILE: ""
 
       BR_CODE: "master"
       BR_DUMP: "dump-files"
@@ -36,9 +37,19 @@ jobs:
 
       - name: Downloading the price page
         run: |
+          file=./${{ env.PT_TMP}}/dse-stock-price-${{ env.DT_TODY }}.html
           mkdir -p ./${{ env.PT_TMP}}/
-          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s > ./${{ env.PT_TMP}}/dse-stock-price-${{ env.DT_TODY }}.html
-          ls -lah ./${{ env.PT_TMP}}/
+          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s > $file
+          echo "FL_PRICE=$file" >> $GITHUB_ENV
+
+      - name: Validate date if file date is today
+        run: |
+          dt_file=$(cat ${{ env.FL_PRICE }} | python -c "import sys; st_='Latest Share Price On '; in_=str(sys.stdin.read()); ds_=in_[in_.find(st_) + len(st_) : in_.find('</h2>', in_.find(st_) + len(st_))]; from datetime import datetime; d_=datetime.strptime(ds_, '%b %d, %Y at %I:%M %p'); print(d_.strftime('%Y-%m-%d'))")
+          echo "DT_FILE=$dt_file" >> $GITHUB_ENV
+
+      - name: Check if executes
+        run: ls -lah
+        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
 
       # - name: Get the code from code branch
       #   uses: actions/checkout@v4
