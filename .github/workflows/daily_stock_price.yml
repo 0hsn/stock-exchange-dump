@@ -33,8 +33,7 @@ jobs:
       - name: Dynamically set MY_DATE environment variable
         run: |
           echo $(date +'%Y-%m-%d')
-          # echo "DT_TODY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-          echo "DT_TODY=2024-05-02" >> $GITHUB_ENV
+          echo "DT_TODY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Downloading the price page
         run: |
