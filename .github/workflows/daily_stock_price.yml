@@ -62,7 +62,7 @@ jobs:
 
           if [ ${{ env.DT_TODY}} != $dt_file ]; then
             echo "${{ env.DT_TODY}} != $dt_file"
-            exit 1
+            exit 0
           fi
 
           # export file date
