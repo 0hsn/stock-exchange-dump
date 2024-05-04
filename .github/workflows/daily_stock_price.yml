@@ -54,11 +54,8 @@ jobs:
           # set command to terminate script on error immediately
           set -e
 
-          python -c "import platform; print(platform.python_version())"
-
           # get date time from the stored file
           dt_file=$(cat ${{ env.FL_PRICE }} | python -c "import sys; st_='Latest Share Price On '; in_=str(sys.stdin.read()); ds_=in_[in_.find(st_) + len(st_) : in_.find('</h2>', in_.find(st_) + len(st_))]; from datetime import datetime; d_=datetime.strptime(ds_, '%b %d, %Y at %I:%M %p'); print(d_.strftime('%Y-%m-%d'))")
-          echo $dt_file
 
           if [ ${{ env.DT_TODY}} != $dt_file ]; then
             echo "${{ env.DT_TODY}} != $dt_file"
@@ -70,31 +67,31 @@ jobs:
 
       - name: Get the code from code branch
         uses: actions/checkout@v4
+        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
         with:
           ref: ${{ env.BR_CODE }}
           token: ${{ secrets.CI_PAT }}
           path: ${{ env.PT_CODE }}
-        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
 
       - name: Set up Python 3.11.7
         uses: actions/setup-python@v5
+        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
         with:
           python-version: "3.11.7"
           cache: "pip"
-        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
 
       - name: Set up Python packages
+        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
         run: |
           cd $PT_CODE
           pip install -r requirements.txt
-        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
 
       - name: Fetch and parse the page, then update the added_file path
+        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
         run: |
           cd $PT_CODE
           cat ${{ env.FL_PRICE }} | ${{ env.CMD_STOCK_PRICE_PAGE }}
           echo "FL_DUMP=$(git ls-files --others --exclude-standard)" >> $GITHUB_ENV
-        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
 
       - name: Get the code from file dump branch
         uses: actions/checkout@v4
