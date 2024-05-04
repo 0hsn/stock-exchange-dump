@@ -32,8 +32,9 @@ jobs:
     steps:
       - name: Dynamically set MY_DATE environment variable
         run: |
-          echo "DT_TODY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
           echo $(date +'%Y-%m-%d')
+          # echo "DT_TODY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          echo "DT_TODY=2024-05-02" >> $GITHUB_ENV
 
       - name: Downloading the price page
         run: |
@@ -51,8 +52,19 @@ jobs:
 
       - name: Get the date from file and set it
         run: |
+          # set command to terminate script on error immediately
+          set -e
+
+          python -c "import platform; print(platform.python_version())"
+
           # get date time from the stored file
           dt_file=$(cat ${{ env.FL_PRICE }} | python -c "import sys; st_='Latest Share Price On '; in_=str(sys.stdin.read()); ds_=in_[in_.find(st_) + len(st_) : in_.find('</h2>', in_.find(st_) + len(st_))]; from datetime import datetime; d_=datetime.strptime(ds_, '%b %d, %Y at %I:%M %p'); print(d_.strftime('%Y-%m-%d'))")
+          echo $dt_file
+
+          if [ ${{ env.DT_TODY}} != $dt_file ]; then
+            echo "${{ env.DT_TODY}} != $dt_file"
+            exit 1
+          fi
 
           # export file date
           echo "DT_FILE=$dt_file" >> $GITHUB_ENV
