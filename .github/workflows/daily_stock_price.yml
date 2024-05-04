@@ -67,7 +67,7 @@ jobs:
 
       - name: Get the code from code branch
         uses: actions/checkout@v4
-        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
+        if: ${{ env.DT_FILE == env.DT_TODY}}
         with:
           ref: ${{ env.BR_CODE }}
           token: ${{ secrets.CI_PAT }}
@@ -75,19 +75,19 @@ jobs:
 
       - name: Set up Python 3.11.7
         uses: actions/setup-python@v5
-        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
+        if: ${{ env.DT_FILE == env.DT_TODY}}
         with:
           python-version: "3.11.7"
           cache: "pip"
 
       - name: Set up Python packages
-        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
+        if: ${{ env.DT_FILE == env.DT_TODY}}
         run: |
           cd $PT_CODE
           pip install -r requirements.txt
 
       - name: Fetch and parse the page, then update the added_file path
-        if: ${{ env.DT_FILE }} == ${{ env.DT_TODY}}
+        if: ${{ env.DT_FILE == env.DT_TODY}}
         run: |
           cd $PT_CODE
           cat ${{ env.FL_PRICE }} | ${{ env.CMD_STOCK_PRICE_PAGE }}
