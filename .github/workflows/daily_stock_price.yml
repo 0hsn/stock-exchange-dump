@@ -55,7 +55,7 @@ jobs:
           set -e
 
           # get date time from the stored file
-          dt_file=$(cat ${{ env.FL_PRICE }} | python -c "import sys; st_='Latest Share Price On '; in_=str(sys.stdin.read()); ds_=in_[in_.find(st_) + len(st_) : in_.find('</h2>', in_.find(st_) + len(st_))]; from datetime import datetime; d_=datetime.strptime(ds_, '%b %d, %Y at %I:%M %p'); print(d_.strftime('%Y-%m-%d'))")
+          dt_file=$(cat ${{ env.FL_PRICE }} | python -m scripts.get_date_from_input.py
 
           # export file date
           echo "DT_FILE=$dt_file" >> $GITHUB_ENV
