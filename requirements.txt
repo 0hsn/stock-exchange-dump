@@ -1,14 +1,15 @@
 cssselect==1.2.0; python_version >= '3.7'
-hence@ git+https://github.com/0hsn/hence.git@f84ede4ef9b6957d6748b25ac22b16e0b793a4f4
+hence@ git+https://github.com/0hsn/hence.git@c0697edf97bc67b563302223cdbd162d7144a69f
 jmespath==1.0.1; python_version >= '3.7'
-lxml==5.2.1; python_version >= '3.6'
-numpy==1.26.4; python_version == '3.11'
-packaging==24.0; python_version >= '3.7'
+lxml==5.3.0; python_version >= '3.6'
+numpy==2.0.1; python_version == '3.11'
+packaging==24.1; python_version >= '3.8'
 pandas==2.2.2; python_version >= '3.9'
+paradag==1.2.0
 parsel==1.9.1; python_version >= '3.8'
 python-dateutil==2.9.0.post0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 pytz==2024.1
 six==1.16.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
-typing-extensions==4.11.0; python_version >= '3.8'
+typing-extensions==4.12.2; python_version >= '3.8'
 tzdata==2024.1; python_version >= '2'
-w3lib==2.1.2; python_version >= '3.7'
+w3lib==2.2.1; python_version >= '3.8'
