@@ -8,8 +8,8 @@ pandas==2.2.3; python_version >= '3.9'
 paradag==1.2.0
 parsel==1.10.0; python_version >= '3.9'
 python-dateutil==2.9.0.post0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'
-pytz==2025.1
+pytz==2025.2
 six==1.17.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'
-typing-extensions==4.12.2; python_version >= '3.8'
-tzdata==2025.1; python_version >= '2'
+typing-extensions==4.13.0; python_version >= '3.8'
+tzdata==2025.2; python_version >= '2'
 w3lib==2.3.1; python_version >= '3.9'
