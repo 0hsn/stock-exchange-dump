@@ -73,7 +73,6 @@ jobs:
         if: ${{ env.DT_FILE == env.DT_TODY}}
         with:
           python-version: "3.13"
-          cache: "pip"
 
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v5
