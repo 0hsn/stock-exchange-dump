@@ -82,7 +82,7 @@ jobs:
         if: ${{ env.DT_FILE == env.DT_TODY}}
         run: |
           cd $PT_CODE
-          uv pip install -r pyproject.toml
+          uv pip install --system -r pyproject.toml
 
       - name: Fetch and parse the page, then update the added_file path
         if: ${{ env.DT_FILE == env.DT_TODY}}
