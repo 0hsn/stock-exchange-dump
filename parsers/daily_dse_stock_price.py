@@ -138,9 +138,4 @@ def transform_price_table_data(ctx: PipelineContext) -> None:
 
 
 if __name__ == "__main__":
-    # data = sys.stdin.read()
-
-    # p_stock_price.parameter(parse_date_on_page={"html": data})
-    # p_stock_price.parameter(parse_price_table={"html": data})
-
     p_stock_price.run()
