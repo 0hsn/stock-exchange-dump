@@ -3,7 +3,7 @@ Daily DSE stock price parser
 """
 
 from datetime import datetime
-import sys
+from urllib import request
 
 from pandas import DataFrame
 from parsel import Selector
@@ -11,27 +11,47 @@ from parsel import Selector
 from hence import Pipeline, PipelineContext
 
 
+DSE_STOCK_PRICE_PAGE = "https://www.dsebd.org/latest_share_price_scroll_l.php"
 SHARE_PRICE_PATH_FMT = "./dumps/dse/share_price/{filename}.csv"
+
 
 p_stock_price = Pipeline()
 
 
 @p_stock_price.add_task()
-def parse_date_on_page(html) -> str:
+def fetch_content():
+    """Fetch the content of example.org"""
+
+    with request.urlopen(DSE_STOCK_PRICE_PAGE) as response:
+        return response.read().decode("utf-8")
+
+
+@p_stock_price.add_task(pass_ctx=True)
+def parse_date_on_page(ctx: PipelineContext) -> str:
     """Find and parse date from page"""
+    html = ctx.result["fetch_content"]
 
     html_sel = Selector(html)
     date = html_sel.css("h2.BodyHead.topBodyHead::text").get()
 
+    today = datetime.today().strftime("%Y-%m-%d")
+
     if date:
-        return date.replace("Latest Share Price On", "").strip()
+        p_today = date.replace("Latest Share Price On", "").strip()
+        p_today_d = datetime.strptime(p_today, "%b %d, %Y at %I:%M %p")
+        p_today_s = p_today_d.date().strftime("%Y-%m-%d")
 
-    return ""
+    if today != p_today_s:
+        raise SystemExit(0)
+
+    return p_today_s
 
 
-@p_stock_price.add_task()
-def parse_price_table(html) -> str:
+@p_stock_price.add_task(pass_ctx=True)
+def parse_price_table(ctx: PipelineContext) -> str:
     """parser price table"""
+
+    html = ctx.result["fetch_content"]
 
     if not html:
         return ""
@@ -97,10 +117,8 @@ def parse_price_table_body(ctx: PipelineContext) -> list[list[str]]:
 def prepare_csv_file_path(ctx: PipelineContext) -> str:
     """Process CSV filepath"""
 
-    date_str_ = ctx.result["parse_date_on_page"]
-    date_ = datetime.strptime(date_str_, "%b %d, %Y at %I:%M %p")
-
-    return SHARE_PRICE_PATH_FMT.format(filename=date_.strftime("%Y-%m-%d"))
+    _date = ctx.result["parse_date_on_page"]
+    return SHARE_PRICE_PATH_FMT.format(filename=_date)
 
 
 @p_stock_price.add_task(pass_ctx=True)
@@ -120,9 +138,9 @@ def transform_price_table_data(ctx: PipelineContext) -> None:
 
 
 if __name__ == "__main__":
-    data = sys.stdin.read()
+    # data = sys.stdin.read()
 
-    p_stock_price.parameter(parse_date_on_page={"html": data})
-    p_stock_price.parameter(parse_price_table={"html": data})
+    # p_stock_price.parameter(parse_date_on_page={"html": data})
+    # p_stock_price.parameter(parse_price_table={"html": data})
 
     p_stock_price.run()
