@@ -12,65 +12,29 @@ jobs:
 
     env:
       DT_TODY: ""
-      DT_FILE: ""
 
       BR_CODE: "master"
       BR_DUMP: "dump-files"
-      BR_DUMP_PR: "new-files/dse-stock-price"
 
       FL_DUMP: ""
-
-      PT_CODE: "master"
-      PT_DUMP: "dump-files"
-      PT_TMP: "tmp-files"
-
+      PR_DUMP_BR: "new-files/dse-stock-price"
       COMMIT_MSG: "Add DSE stock price on date"
 
-      DSE_STOCK_PRICE_PAGE: "https://www.dsebd.org/latest_share_price_scroll_l.php"
-      CMD_STOCK_PRICE_PAGE: "python -m parsers.daily_dse_stock_price"
-
     steps:
-      - name: Dynamically set MY_DATE environment variable
+      - name: Dynamically set DT_TODY environment variable
         run: |
           echo $(date +'%Y-%m-%d')
           echo "DT_TODY=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
-      - name: Downloading the price page
-        run: |
-          # make file name
-          file=~/${{ env.PT_TMP}}/dse-stock-price-${{ env.DT_TODY }}.html
-
-          # create file dir
-          mkdir -p ~/${{ env.PT_TMP}}/ 
-
-          # get the file and store it
-          curl ${{ env.DSE_STOCK_PRICE_PAGE }} -s > $file 
-          
-          # export file path
-          echo "FL_PRICE=$file" >> $GITHUB_ENV
-
-      - name: Get the date from file and set it
-        run: |
-          # set command to terminate script on error immediately
-          set -e
-
-          # get date time from the stored file
-          dt_file=$(cat ${{ env.FL_PRICE }} | python -c "import sys; st_='Latest Share Price On '; in_=str(sys.stdin.read()); ds_=in_[in_.find(st_) + len(st_) : in_.find('</h2>', in_.find(st_) + len(st_))]; from datetime import datetime; d_=datetime.strptime(ds_, '%b %d, %Y at %I:%M %p'); print(d_.strftime('%Y-%m-%d'))")
-
-          # export file date
-          echo "DT_FILE=$dt_file" >> $GITHUB_ENV
-
       - name: Get the code from code branch
         uses: actions/checkout@v4
-        if: ${{ env.DT_FILE == env.DT_TODY}}
         with:
           ref: ${{ env.BR_CODE }}
           token: ${{ secrets.CI_PAT }}
-          path: ${{ env.PT_CODE }}
+          path: ${{ env.BR_CODE }}
 
       - name: Set up Python 3.13
         uses: actions/setup-python@v5
-        if: ${{ env.DT_FILE == env.DT_TODY}}
         with:
           python-version: "3.13"
 
@@ -78,16 +42,14 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: Set up Python packages
-        if: ${{ env.DT_FILE == env.DT_TODY}}
         run: |
-          cd $PT_CODE
+          cd $BR_CODE
           uv pip install --system -r pyproject.toml
 
       - name: Fetch and parse the page, then update the added_file path
-        if: ${{ env.DT_FILE == env.DT_TODY}}
         run: |
-          cd $PT_CODE
-          cat ${{ env.FL_PRICE }} | ${{ env.CMD_STOCK_PRICE_PAGE }}
+          cd $BR_CODE
+          python -m parsers.daily_dse_stock_price
           echo "FL_DUMP=$(git ls-files --others --exclude-standard)" >> $GITHUB_ENV
 
       - name: Get the code from file dump branch
@@ -96,13 +58,13 @@ jobs:
         with:
           ref: ${{ env.BR_DUMP }}
           token: ${{ secrets.CI_PAT }}
-          path: ${{ env.PT_DUMP }}
+          path: ${{ env.BR_DUMP }}
 
       - name: Copy create dump to dump path
         if: ${{ endsWith(env.FL_DUMP, '.csv') }}
         run: |
-          cp "$PT_CODE/$FL_DUMP" "$PT_DUMP/$(dirname $FL_DUMP)"
-          cd ${{ env.PT_DUMP }}
+          cp "$BR_CODE/$FL_DUMP" "$BR_DUMP/$(dirname $FL_DUMP)"
+          cd ${{ env.BR_DUMP }}
           git status -u
 
       - name: Push file `${{ env.FL_DUMP }}`
@@ -113,7 +75,7 @@ jobs:
           default_author: github_actions
           fetch: false
           message: ${{ env.COMMIT_MSG }} ${{ env.DT_TODY }}
-          new_branch: ${{ env.BR_DUMP_PR }}-${{ env.DT_TODY }}
+          new_branch: ${{ env.PR_DUMP_BR }}-${{ env.DT_TODY }}
           cwd: "./${{env.BR_DUMP}}"
 
       - name: Create PR to `${{env.BR_DUMP}}`
@@ -121,5 +83,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.CI_PAT }}
         run: |
-          cd ${{ env.PT_DUMP }}
-          gh pr create -B ${{env.BR_DUMP}} -H "${{ env.BR_DUMP_PR }}-${{ env.DT_TODY }}" -f
+          cd ${{ env.BR_DUMP }}
+          gh pr create -B ${{env.BR_DUMP}} -H "${{ env.PR_DUMP_BR }}-${{ env.DT_TODY }}" -f
